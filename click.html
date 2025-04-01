@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Display</title>
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .image-box {
+            text-align: center;
+            border: 2px solid #ccc;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        img {
+            width: 200px;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: green;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="imageContainer"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const today = new Date();
+
+            let month = (today.getMonth() + 1).toString().padStart(2, '0'); // MM
+            let day = today.getDate().toString().padStart(2, '0'); // DD
+            let mmdd = month + (day); // Format MMDD
+	 
+            console.log(mmdd);
+            const images = [
+    "1119 A Akhil Jain Anshita Jain", "0412 B Akhil Jain", "0821 B Anshita Jain",
+    "0213 A Naveen Bagrecha Nidhi Bagrecha", "1210 B Naveen Bagrecha", "0818 B Nidhi Bagrecha",
+    "1215 A Mohit Khetpaliya Trishangi Khetpaliya", "1202 B Mohit Khetpaliya", "0906 B Trishangi Khetpaliya",
+    "1208 A Rishabh Binaikiya Khusbhu Binaykiya", "1207 B Rishabh Binaikiya", "1009 B Khusbhu Binaykiya",
+    "0429 A Rishabh Burad Navita Burad", "0219 B Rishabh Burad", "0305 B Navita Burad",
+    "0212 A Pushpendra Chodhary Harshita Choudhary", "1124 B Pushpendra Chodhary", "0310 B Harshita Choudhary",
+    "0629 A Sumit Doshi Trapti Doshi", "0912 B Sumit Doshi", "0909 B Trapti Doshi",
+    "0702 A Manish Golecha Sanjoli Golecha", "1223 B Manish Golecha", "1121 B Sanjoli Golecha",
+    "0121 A Mohit Kumat Khudhbu Jain", "0715 B Mohit Kumat", "0514 B Khudhbu Jain",
+    "1104 A Ankit Khinwasara POOJA khinvasara", "0405 B Ankit Khinwasara", "0923 B POOJA khinvasara",
+    "0429 A Manish Jangra Rakhi Jangra", "1023 B Manish Jangra", "0413 B Rakhi Jangra",
+    "0701 A Jayesh Jain Nikita Jain", "0925 B Jayesh Jain", "0419 B Nikita Jain",
+    "0115 A Arpan Bhandari Shikha Jain", "1031 B Arpan Bhandari", "1129 B Shikha Jain",
+    "0223 A Abhishek Ranka Rekha Ranka", "0217 B Abhishek Ranka", "0325 B Rekha Ranka",
+    "1130 A Arpit Chajjer Madhuri Pamecha", "0825 B Arpit Chajjer", "1004 B Madhuri Pamecha",
+    "0214 A Ashish Gadiya Monika Gadiya", "1021 B Ashish Gadiya", "1121 B Monika Gadiya",
+    "0117 A Rishabh Modi Priyanka Jain", "0506 B Rishabh Modi", "0226 B Priyanka Jain",
+    "1121 A Shushmit Khetpaliya Riddhi Khetpaliya", "0925 B Shushmit Khetpaliya", "0827 B Riddhi Khetpaliya",
+    "0628 A Ujjawal Kala Priyanka Jain", "0208 B Ujjawal Kala", "0922 B Priyanka Jain",
+    "0611 A Yashwant Khicha Khushbu Kanther", "0822 B Yashwant Khicha", "1020 B Khushbu Kanther",
+    "0218 A Ankit Kothari Risha Kothari", "0817 B Ankit Kothari", "1030 B Risha Kothari",
+    "1128 A Lavish Lodha Anjali Jain", "1010 B Lavish Lodha", "0609 B Anjali Jain",
+    "1211 A Pankaj Lodha Jyoti Lodha", "0112 B Pankaj Lodha", "0518 B Jyoti Lodha",
+    "1202 A Sheetal Mehta VINITA MEHTA", "0324 B Sheetal Mehta", "0804 B VINITA MEHTA",
+    "1031 A Mahendra Lodha Shweta Lodha", "0115 B Mahendra Lodha", "0816 B Shweta Lodha",
+    "0124 A Praveen Makana Rekha Makana", "0808 B Praveen Makana", "1215 B Rekha Makana",
+    "0504 A Mayank Tater Khushbu Tater", "0118 B Mayank Tater", "1011 B Khushbu Tater",
+    "0125 A Piyush Kumar Ranka Apurva Ranka", "0706 B Piyush Kumar Ranka", "0528 B Apurva Ranka",
+    "0416 A Pawan Osatwal Neha Tater", "0811 B Pawan Osatwal", "0726 B Neha Tater",
+    "0123 A Prateek Bant JYOTI BANT", "0413 B Prateek Bant", "1214 B JYOTI BANT",
+    "1128 A Rohit Burad Ritika Jain", "0103 B Rohit Burad", "0728 B Ritika Jain",
+    "1119 A Ronak Bohra Mamta Jain", "0619 B Ronak Bohra", "0830 B Mamta Jain",
+    "1211 A Ronak Kothari Surabhi Jain", "0810 B Ronak Kothari", "0208 B Surabhi Jain",
+    "0110 A Jinendra Shrishrimal Suhani Lodha", "0624 B Jinendra Shrishrimal", "0824 B Suhani Lodha",
+    "0725 A Sandeep Sankhla Madhu sankhla", "1112 B Sandeep Sankhla", "1019 B Madhu sankhla",
+    "0315 A Sanmati Raonka Sakshi Jain", "0917 B Sanmati Raonka", "0425 B Sakshi Jain",
+    "0130 A Hemant Sethiya Jyoti Sethiya", "1225 B Hemant Sethiya", "0801 B Jyoti Sethiya",
+    "0201 A Siddharth Shrishrimal Raksha Shrishrimal", "0110 B Siddharth Shrishrimal", "1226 B Raksha Shrishrimal",
+    "1128 A Shubham Khinwasra Anu Khinvansara", "0621 B Shubham Khinwasra", "0911 B Anu Khinvansara",
+    "1103 A Sumit Jain  Ritu Jain", "0614 B Sumit Jain", "1216 B Ritu Jain",
+    "0123 A ANKIT KAWAD NEHA KAWAD", "0228 B ANKIT KAWAD", "0224 B NEHA KAWAD",
+    "0126 A Aashish Bhandari KAVITA JAIN", "0926 B Aashish Bhandari", "0320 B KAVITA JAIN",
+    "0129 A Nehil Bohra shweta jain", "0825 B Nehil Bohra", "0710 B shweta jain",
+    "0502 A Abhishek sancheti Priyanka Sancheti", "0720 B Abhishek sancheti", "1231 B Priyanka Sancheti",
+    "0420 A Nikhil Bohra Sakshi Bohra", "0613 B Nikhil Bohra", "0110 B Sakshi Bohra",
+    "0216 A Arihant Bakliwal Soyal Bakliwal", "0802 B Arihant Bakliwal", "1206 B Soyal Bakliwal",
+    "0615 A Aashish Jangra Manisha Jangra", "0412 B Aashish Jangra", "0611 B Manisha Jangra",
+    "1204 A Hemant Chhajer aanchal jain", "0815 B Hemant Chhajer", "1101 B aanchal jain",
+    "1128 A Kapil Ostwal rakhi jain", "0602 B Kapil Ostwal", "0108 B rakhi jain",
+    "0307 A Vipul Bhandari DIVYA JAIN", "0202 B Vipul Bhandari", "0114 B DIVYA JAIN",
+    "0131 A YASH JAIN kajal jain", "0725 B YASH JAIN", "0109 B kajal jain",
+    "0125 A KSHITIZ JAIN RASHMI JAIN", "0219 B KSHITIZ JAIN", "0822 B RASHMI JAIN",
+    "0126 A AKASH JAIN PRIYANKA JAIN", "0626 B AKASH JAIN", "0719 B PRIYANKA JAIN",
+    "0307 A AMAN JAIN PADAWAT POOJA jain", "0507 B AMAN JAIN PADAWAT", "0913 B POOJA jain",
+    "0418 A deepak jain CHANDNI JAIN", "1027 B deepak jain", "0618 B CHANDNI JAIN",
+    "1211 A aashish bhandhari DARSHNA JAIN", "0427 B aashish bhandhari", "1209 B DARSHNA JAIN",
+    "0529 A harshit kather CHINKI JAIN", "0426 B harshit kather", "0609 B CHINKI JAIN"
+]
+;
+
+console.log(images.length);
+             const imageFolder = "./output_images/";
+            const container = document.getElementById("imageContainer");
+            
+            images.forEach(fileName => {
+                if (fileName.startsWith(mmdd)) {
+                    let fileUrl = imageFolder + fileName+".jpg";
+                    let code = fileName.substr(5, 1).toUpperCase();
+                    let name = fileName.substring(6).split('.')[0];
+                    
+                    let message = "";
+                    if (code === "B") {
+                        message = `Happy Birthday ${name}!`;
+                    } else if (code === "A") {
+                        message = `Happy Anniversary ${name}!`;
+                    }
+                    
+                    let div = document.createElement("div");
+                    div.classList.add("image-box");
+                    div.innerHTML = `
+                        <img src="${fileUrl}" alt="Image">
+                        <p>${message}</p>
+                        <button onclick="shareOnWhatsApp('${fileUrl}', '${message}')">Share on WhatsApp</button>
+                    `;
+                    container.appendChild(div);
+                }
+            });
+        });
+
+        function shareOnWhatsApp(imageUrl, text) {
+            let whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + imageUrl)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
