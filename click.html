@@ -135,7 +135,7 @@ console.log(images.length);
         });
 
         function shareOnWhatsApp(imageUrl, text) {
-            let whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + imageUrl)}`;
+            let whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + 'https://techashish12.github.io/jsf/'+imageUrl)}`;
             window.open(whatsappUrl, '_blank');
         }
     </script>
