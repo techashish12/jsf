@@ -114,7 +114,8 @@ console.log(images.length);
                     let fileUrl = imageFolder + fileName+".jpg";
                     let code = fileName.substr(5, 1).toUpperCase();
                     let name = fileName.substring(6).split('.')[0];
-                    let imageurlfinal=fileName+".jpg";
+                    let imageurlfinal=(fileName+".jpg").replace(/ /g, "%20");
+			console.log(imageurlfinal);
                     let message = "";
                     if (code === "B") {
                         message = `Happy Birthday ${name}!`;
@@ -135,6 +136,7 @@ console.log(images.length);
         });
 
         function shareOnWhatsApp(imageUrl, text) {
+		
             let whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + 'https://techashish12.github.io/jsf/output_images/'+imageUrl)}`;
             window.open(whatsappUrl, '_blank');
         }
