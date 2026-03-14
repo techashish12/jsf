@@ -2,50 +2,100 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>PDF Viewer</title>
+<title>Advanced PDF Viewer</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <style>
+
 body{
-    text-align:center;
-    font-family:Arial;
+margin:0;
+font-family:Arial;
+background:#1e1e1e;
+color:white;
+text-align:center;
+}
+
+#toolbar{
+background:#333;
+padding:10px;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:8px;
+}
+
+button{
+padding:6px 12px;
+border:none;
+background:#4CAF50;
+color:white;
+cursor:pointer;
+border-radius:4px;
+}
+
+button:hover{
+background:#45a049;
+}
+
+#viewer{
+display:flex;
+justify-content:center;
+margin-top:10px;
 }
 
 canvas{
-    border:1px solid #ccc;
-    margin-top:10px;
+border:1px solid #555;
 }
+
 </style>
+
 </head>
 
 <body>
 
-<h2>PDF Viewer</h2>
+<div id="toolbar">
 
-<button onclick="prevPage()">Previous</button>
-<span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
-<button onclick="nextPage()">Next</button>
+<button onclick="prevPage()">⏪ Prev</button>
 
-<br>
+<span>Page <span id="page_num">1</span> / <span id="page_count">0</span></span>
 
+<button onclick="nextPage()">Next ⏩</button>
+
+<button onclick="zoomIn()">🔍 Zoom +</button>
+<button onclick="zoomOut()">🔍 Zoom -</button>
+
+<button onclick="rotate()">🔄 Rotate</button>
+
+<button onclick="downloadPDF()">⬇ Download</button>
+
+<button onclick="fullscreen()">⛶ Fullscreen</button>
+
+</div>
+
+<div id="viewer">
 <canvas id="pdfCanvas"></canvas>
+</div>
 
 <script>
 
-const url = "biop.pdf";   // YOUR PDF FILE
+const url = "sample.pdf";  // your pdf file
 
 let pdfDoc = null;
 let pageNum = 1;
-let canvas = document.getElementById("pdfCanvas");
-let ctx = canvas.getContext("2d");
+let scale = 1.5;
+let rotation = 0;
+
+const canvas = document.getElementById("pdfCanvas");
+const ctx = canvas.getContext("2d");
 
 pdfjsLib.getDocument(url).promise.then(function(pdf){
 
-    pdfDoc = pdf;
-    document.getElementById("page_count").textContent = pdf.numPages;
+pdfDoc = pdf;
 
-    renderPage(pageNum);
+document.getElementById("page_count").textContent = pdf.numPages;
+
+renderPage(pageNum);
 
 });
 
@@ -53,14 +103,17 @@ function renderPage(num){
 
 pdfDoc.getPage(num).then(function(page){
 
-let viewport = page.getViewport({scale:1.5});
+let viewport = page.getViewport({
+scale: scale,
+rotation: rotation
+});
 
 canvas.height = viewport.height;
 canvas.width = viewport.width;
 
 let renderContext = {
-    canvasContext: ctx,
-    viewport: viewport
+canvasContext: ctx,
+viewport: viewport
 };
 
 page.render(renderContext);
@@ -72,15 +125,71 @@ document.getElementById("page_num").textContent = num;
 }
 
 function prevPage(){
+
 if(pageNum <= 1) return;
+
 pageNum--;
+
 renderPage(pageNum);
+
 }
 
 function nextPage(){
+
 if(pageNum >= pdfDoc.numPages) return;
+
 pageNum++;
+
 renderPage(pageNum);
+
+}
+
+function zoomIn(){
+
+scale += 0.2;
+
+renderPage(pageNum);
+
+}
+
+function zoomOut(){
+
+scale -= 0.2;
+
+if(scale < 0.5) scale = 0.5;
+
+renderPage(pageNum);
+
+}
+
+function rotate(){
+
+rotation += 90;
+
+renderPage(pageNum);
+
+}
+
+function downloadPDF(){
+
+let link = document.createElement("a");
+
+link.href = url;
+
+link.download = "biop.pdf";
+
+link.click();
+
+}
+
+function fullscreen(){
+
+let elem = document.documentElement;
+
+if(elem.requestFullscreen){
+elem.requestFullscreen();
+}
+
 }
 
 </script>
