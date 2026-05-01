@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JSGPL XIII Auction Live</title>
+
+<style>
+body {
+    background:#0b0f1a;
+    color:white;
+    font-family:sans-serif;
+    text-align:center;
+}
+
+button {
+    padding:12px 25px;
+    margin:10px;
+    border:none;
+    border-radius:25px;
+    background:linear-gradient(45deg,#ffcc00,#ff9800);
+    font-weight:bold;
+}
+
+/* stage */
+.stage {
+    margin:30px auto;
+    width:320px;
+    padding:20px;
+    border:2px solid gold;
+    border-radius:15px;
+    background:#141b2d;
+}
+
+.player, .teamName {
+    font-size:22px;
+    font-weight:bold;
+    height:30px;
+}
+
+.rolling {
+    animation:flicker 0.1s infinite;
+}
+
+@keyframes flicker {
+    0%{opacity:0.5;}
+    100%{opacity:1;}
+}
+
+.sold {
+    color:#00ffcc;
+    text-shadow:0 0 10px #00ffcc;
+}
+
+/* cards */
+.teams {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:10px;
+    margin-top:20px;
+}
+
+.teamCard {
+    background:#1c2333;
+    padding:10px;
+    border-radius:10px;
+    animation:pop 0.4s ease;
+}
+
+@keyframes pop {
+    from { transform:scale(0); opacity:0; }
+    to { transform:scale(1); opacity:1; }
+}
+
+.teamCard img {
+    width:50px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🏏 JSGPL XIII Auction LIVE</h2>
+
+<button onclick="startAuction('SILVER-4')">SILVER-4</button>
+<button onclick="startAuction('SILVER-5')">SILVER-5</button>
+<button onclick="startAuction('SILVER-6')">SILVER-6</button>
+<button onclick="startAuction('SILVER-7')">SILVER-7</button>
+
+<div class="stage">
+    <div>🎤 Player</div>
+    <div id="playerBox" class="player">READY</div>
+
+    <div style="margin-top:10px;">🏏 Team</div>
+    <div id="teamBox" class="teamName">WAITING</div>
+</div>
+
+<h3>Final Teams</h3>
+<div class="teams" id="teams"></div>
+
+<script>
+
+// DATA
+const data = {
+"SILVER-4":[
+"UMANG DUNGARWAL","JAINAM MODI","INESH DOSHI",
+"NIKSHAY KOTHARI","DAKSH CHHAJJER","HARSHIT KOTHARI","BHAVAYAM KOTHARI"
+],
+"SILVER-5":[
+"ANKUSH RANKA","ARUN RUNIWAL","SUNIL MEHTA",
+"DINESH KOTHARI","HIREN BHANDARI","NAVEEN NAHTA","VIKRAM SANKHLA"
+],
+"SILVER-6":[
+"SIDDARTH DUGAR","ANKIT KOTHARI","LOKESH CHOPRA",
+"MANISH KUMAR JAIN","AYAN SSSM","ANSHUL BOHRA","YASHWANT KHICHA"
+],
+"SILVER-7":[
+"ABHISHEK RANKA","RAUNAK JAIN","ARYAN JAIN",
+"ASHOK SSM","AMIT KOTHARI","MAYANKA KAWADIYA"
+]
+};
+
+const teams = [
+{name:"JSG Capitals",logo:"1.png"},
+{name:"JSG Challengers",logo:"2.png"},
+{name:"JSG Knight Riders",logo:"3.png"},
+{name:"JSG Royals",logo:"4.png"},
+{name:"JSG Sunrisers",logo:"5.png"},
+{name:"JSG Super Kings",logo:"6.png"},
+{name:"JSG Titans",logo:"7.png"}
+];
+
+function shuffle(arr){
+    return arr.sort(()=>Math.random()-0.5);
+}
+
+function startAuction(category){
+
+    let players = shuffle([...data[category]]);
+    let availableTeams = shuffle([...teams]);
+
+    document.getElementById("teams").innerHTML="";
+
+    function next(){
+
+        // stop when ALL teams filled
+        if(availableTeams.length === 0) return;
+
+        let playerBox = document.getElementById("playerBox");
+        let teamBox = document.getElementById("teamBox");
+
+        playerBox.classList.add("rolling");
+        teamBox.classList.add("rolling");
+
+        let roll = setInterval(()=>{
+            let rp = players[Math.floor(Math.random()*players.length)] || "----";
+            let rt = availableTeams[Math.floor(Math.random()*availableTeams.length)];
+
+            playerBox.innerText = rp;
+            teamBox.innerText = rt.name;
+        },80);
+
+        setTimeout(()=>{
+
+            clearInterval(roll);
+
+            // FINAL UNIQUE
+            let player = players.length > 0 ? players.shift() : "❌ No Player";
+            let team = availableTeams.splice(
+                Math.floor(Math.random()*availableTeams.length),1
+            )[0];
+
+            playerBox.innerText = player;
+            teamBox.innerText = team.name;
+
+            playerBox.classList.remove("rolling");
+            teamBox.classList.remove("rolling");
+
+            playerBox.classList.add("sold");
+            teamBox.classList.add("sold");
+
+            // 🔥 CREATE CARD AFTER SELECTION
+            let div = document.createElement("div");
+            div.className="teamCard";
+
+            div.innerHTML=`
+            <img src="${team.logo}">
+            <h4>${team.name}</h4>
+            <p>${player}</p>
+            `;
+
+            document.getElementById("teams").appendChild(div);
+
+            setTimeout(()=>{
+                playerBox.classList.remove("sold");
+                teamBox.classList.remove("sold");
+                next(); // next player
+            },1200);
+
+        },1500);
+    }
+
+    next();
+}
+
+</script>
+
+</body>
+</html>
